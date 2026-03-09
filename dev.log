@@ -1,0 +1,31 @@
+Debugger listening on ws://127.0.0.1:63720/d0472978-e350-4e07-914b-d70ea0bcfa0a
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger attached.
+
+> focusdock@1.0.0 dev
+> next dev
+
+Debugger listening on ws://127.0.0.1:63722/7756f11d-e8fb-4e17-ba0d-59c8624abe30
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger attached.
+Debugger listening on ws://127.0.0.1:63724/de162b46-306e-4a5b-a9c1-52d9596fd302
+For help, see: https://nodejs.org/en/docs/inspector
+Debugger attached.
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 3.4s
+ ○ Compiling / ...
+ ✓ Compiled / in 4.7s (1105 modules)
+ GET / 200 in 5173ms
+ ✓ Compiled in 767ms (560 modules)
+ GET / 200 in 56ms
+ GET / 200 in 43ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 762ms (1094 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1114ms
+ GET / 200 in 143ms
+[?25h
+Waiting for the debugger to disconnect...
+Waiting for the debugger to disconnect...

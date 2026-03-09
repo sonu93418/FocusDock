@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusDock - Test Page</title>
+    <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      body {
+          background: linear-gradient(135deg, #0a0e27 0%, #0f1333 50%, #0a0e27 100%);
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-center;
+          font-family: 'Arial', sans-serif;
+          color: white;
+      }
+      .container {
+          text-align: center;
+          padding: 40px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+          max-width: 500px;
+      }
+      h1 {
+          font-size: 3em;
+          margin-bottom: 20px;
+          background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+      }
+      .status {
+          font-size: 1.2em;
+          margin: 20px 0;
+          padding: 15px;
+          background: rgba(139, 92, 246, 0.2);
+          border-radius: 10px;
+      }
+      .success {
+          color: #10b981;
+      }
+      .instructions {
+          text-align: left;
+          margin-top: 30px;
+          padding: 20px;
+          background: rgba(0, 0, 0, 0.3);
+          border-radius: 10px;
+          line-height: 1.8;
+      }
+      .instructions ol {
+          margin-left: 20px;
+      }
+      .button {
+          display: inline-block;
+          margin-top: 20px;
+          padding: 15px 40px;
+          background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+          color: white;
+          text-decoration: none;
+          border-radius: 10px;
+          font-weight: bold;
+          transition: transform 0.2s;
+      }
+      .button:hover {
+          transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>✅ FocusDock is Running!</h1>
+      <div class="status success">
+        🎉 Server Status: <strong>ACTIVE</strong>
+      </div>
+      <p>If you're seeing this page, your FocusDock is working correctly!</p>
+
+      <div class="instructions">
+        <h3>📋 To view the full dashboard:</h3>
+        <ol>
+          <li>Open your browser</li>
+          <li>Go to: <strong>http://localhost:3000</strong></li>
+          <li>Press <strong>Ctrl + Shift + R</strong> (hard refresh)</li>
+          <li>If still blank, press <strong>F12</strong> to open DevTools</li>
+          <li>Check Console tab for any errors</li>
+        </ol>
+      </div>
+
+      <a href="http://localhost:3000" class="button">Open Full Dashboard →</a>
+
+      <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.7">
+        <p>Server Port: 3000</p>
+        <p>Status: Development Mode</p>
+      </div>
+    </div>
+  </body>
+</html>
