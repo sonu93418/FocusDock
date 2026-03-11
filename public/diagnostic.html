@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusDock - Diagnostic Page</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(
+          135deg,
+          #0a0e27 0%,
+          #0f1333 50%,
+          #0a0e27 100%
+        );
+        font-family: "Arial", sans-serif;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        text-align: center;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        max-width: 600px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      }
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .status-box {
+        margin: 20px 0;
+        padding: 20px;
+        background: rgba(139, 92, 246, 0.2);
+        border-radius: 10px;
+        border: 1px solid #8b5cf6;
+      }
+      .success {
+        color: #10b981;
+        font-size: 1.5em;
+        margin: 10px 0;
+      }
+      .warning {
+        color: #f59e0b;
+        font-size: 1.2em;
+        margin: 10px 0;
+      }
+      .info {
+        color: #60a5fa;
+        line-height: 1.8;
+        margin: 10px 0;
+      }
+      ol {
+        text-align: left;
+        margin: 20px auto;
+        max-width: 500px;
+        line-height: 2;
+      }
+      .button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 15px 40px;
+        background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: transform 0.2s;
+        cursor: pointer;
+      }
+      .button:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔧 FocusDock Diagnostic</h1>
+
+      <div class="status-box">
+        <div class="success">✅ HTML/CSS is working!</div>
+        <div class="info">
+          If you see this page, your browser and basic files are OK.
+        </div>
+      </div>
+
+      <div class="status-box">
+        <div class="warning">⚠️ Next.js App Not Loading?</div>
+        <div class="info">Follow these steps to fix:</div>
+        <ol>
+          <li><strong>Close all browser tabs</strong> with localhost</li>
+          <li><strong>Open Command Prompt as Administrator</strong></li>
+          <li><strong>Navigate to:</strong> <code>cd C:\FocusDock</code></li>
+          <li><strong>Run:</strong> <code>restart-server.bat</code></li>
+          <li><strong>Wait for:</strong> "Ready in X.Xs"</li>
+          <li><strong>Open:</strong> http://localhost:3000</li>
+          <li>
+            <strong>Hard Refresh:</strong> Press <kbd>Ctrl</kbd> +
+            <kbd>Shift</kbd> + <kbd>R</kbd>
+          </li>
+          <li>
+            <strong>Check Console:</strong> Press <kbd>F12</kbd> and check for
+            errors
+          </li>
+        </ol>
+      </div>
+
+      <div class="status-box">
+        <div class="info">💡 Current Time: <span id="time"></span></div>
+      </div>
+    </div>
+
+    <script>
+      function updateTime() {
+        const now = new Date();
+        document.getElementById("time").textContent = now.toLocaleTimeString();
+      }
+      updateTime();
+      setInterval(updateTime, 1000);
+    </script>
+  </body>
+</html>

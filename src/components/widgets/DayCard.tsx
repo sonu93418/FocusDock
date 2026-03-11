@@ -77,45 +77,46 @@ export default function DayCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: dayNumber * 0.05 }}
-      className="glass-card glass-card-hover p-5"
+      transition={{ duration: 0.2, delay: dayNumber * 0.03 }}
+      className="glass-card p-3 hover:bg-white hover:bg-opacity-5 transition-all duration-200"
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
           <div
-            className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
+            className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm transition-all duration-200 ${
               isCompleted
-                ? "bg-gradient-to-br from-green-500 to-emerald-500 glow-effect"
+                ? "bg-gradient-to-br from-green-500 to-emerald-500 shadow-md"
                 : "bg-white bg-opacity-5"
             }`}
           >
-            {isCompleted ? <Check className="w-6 h-6" /> : dayNumber}
+            {isCompleted ? <Check className="w-5 h-5" /> : dayNumber}
           </div>
           <div>
-            <h4 className="font-poppins font-semibold text-lg">
+            <h4 className="font-poppins font-semibold text-sm">
               Day {dayNumber}
             </h4>
-            <p className="text-xs text-gray-400">
+            <p className="text-[10px] text-gray-400">
               {completedCount} / {totalCount} tasks
             </p>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2 mb-3 min-h-[100px] max-h-[200px] overflow-y-auto">
+      <div className="space-y-1.5 mb-2 min-h-[80px] max-h-[150px] overflow-y-auto">
         <AnimatePresence>
           {tasks.map((task) => (
             <motion.div
               key={task.id}
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -5 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
+              exit={{ opacity: 0, x: 5 }}
+              transition={{ duration: 0.2 }}
               className="group"
             >
               {editingId === task.id ? (
-                <div className="flex gap-2">
+                <div className="flex gap-1.5">
                   <input
                     type="text"
                     value={editText}
@@ -126,15 +127,15 @@ export default function DayCard({
                       e.key === "Enter" && handleSaveEdit(task.id)
                     }
                     onBlur={() => handleSaveEdit(task.id)}
-                    className="flex-1 px-3 py-2 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-purple-accent"
+                    className="flex-1 px-2 py-1.5 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-purple-accent transition-all duration-200"
                     autoFocus
                   />
                 </div>
               ) : (
-                <div className="flex items-center gap-2 bg-white bg-opacity-5 rounded-lg p-3 hover:bg-opacity-10 transition-all">
+                <div className="flex items-center gap-2 bg-white bg-opacity-5 rounded-lg p-2 hover:bg-opacity-10 transition-all duration-200">
                   <button
                     onClick={() => handleToggleTask(task.id)}
-                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                    className={`w-4 h-4 rounded border flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
                       task.completed
                         ? "bg-gradient-to-br from-purple-accent to-blue-accent border-transparent"
                         : "border-gray-500"
@@ -144,14 +145,14 @@ export default function DayCard({
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ type: "spring" }}
+                        transition={{ duration: 0.2 }}
                       >
-                        <Check className="w-3 h-3 text-white" />
+                        <Check className="w-2.5 h-2.5 text-white" />
                       </motion.div>
                     )}
                   </button>
                   <span
-                    className={`flex-1 text-sm ${
+                    className={`flex-1 text-xs ${
                       task.completed
                         ? "line-through text-gray-500"
                         : "text-gray-200"
@@ -159,16 +160,16 @@ export default function DayCard({
                   >
                     {task.text}
                   </span>
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleEditTask(task.id)}
-                      className="p-1 hover:bg-white hover:bg-opacity-10 rounded"
+                      className="p-1 hover:bg-white hover:bg-opacity-10 rounded transition-colors duration-200"
                     >
                       <Edit2 className="w-3 h-3 text-blue-400" />
                     </button>
                     <button
                       onClick={() => handleDeleteTask(task.id)}
-                      className="p-1 hover:bg-white hover:bg-opacity-10 rounded"
+                      className="p-1 hover:bg-white hover:bg-opacity-10 rounded transition-colors duration-200"
                     >
                       <Trash2 className="w-3 h-3 text-red-400" />
                     </button>
@@ -181,7 +182,7 @@ export default function DayCard({
       </div>
 
       {isAdding ? (
-        <div className="flex gap-2">
+        <div className="flex gap-1.5">
           <input
             type="text"
             value={newTaskText}
@@ -192,12 +193,12 @@ export default function DayCard({
               e.key === "Enter" && handleAddTask()
             }
             placeholder="Enter task..."
-            className="flex-1 px-3 py-2 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-purple-accent"
+            className="flex-1 px-2 py-1.5 bg-white bg-opacity-5 border border-white border-opacity-10 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-purple-accent transition-all duration-200"
             autoFocus
           />
           <button
             onClick={handleAddTask}
-            className="px-4 py-2 bg-gradient-to-r from-purple-accent to-blue-accent rounded-lg text-sm font-semibold"
+            className="px-3 py-1.5 bg-gradient-to-r from-purple-accent to-blue-accent rounded-lg text-xs font-medium transition-all duration-200"
           >
             Add
           </button>
@@ -206,19 +207,19 @@ export default function DayCard({
               setIsAdding(false);
               setNewTaskText("");
             }}
-            className="px-4 py-2 bg-white bg-opacity-10 rounded-lg text-sm font-semibold"
+            className="px-3 py-1.5 bg-white bg-opacity-10 rounded-lg text-xs font-medium transition-all duration-200"
           >
             Cancel
           </button>
         </div>
       ) : (
         <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
           onClick={() => setIsAdding(true)}
-          className="w-full py-2 border-2 border-dashed border-gray-600 rounded-lg flex items-center justify-center gap-2 text-sm text-gray-400 hover:border-purple-accent hover:text-purple-accent transition-all"
+          className="w-full py-2 border border-dashed border-gray-600 rounded-lg flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:border-purple-accent hover:text-purple-accent transition-all duration-200"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-3.5 h-3.5" />
           Add Task
         </motion.button>
       )}

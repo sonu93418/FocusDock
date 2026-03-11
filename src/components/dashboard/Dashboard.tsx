@@ -1,89 +1,148 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Sparkles, Minimize2 } from 'lucide-react'
-import { getGreeting } from '@/utils/helpers'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
-import Clock from '@/components/widgets/Clock'
-import FocusTimer from '@/components/widgets/FocusTimer'
-import MissionCard from '@/components/widgets/MissionCard'
-import DayCard, { Task } from '@/components/widgets/DayCard'
-import ProgressBar from '@/components/widgets/ProgressBar'
-import MiniWidget from '@/components/widgets/MiniWidget'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Sparkles, Minimize2, Pin } from "lucide-react";
+import { getGreeting } from "@/utils/helpers";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import LiveClock from "@/components/widgets/LiveClock";
+import Clock from "@/components/widgets/Clock";
+import RealTimer from "@/components/widgets/RealTimer";
+import MissionCard from "@/components/widgets/MissionCard";
+import DayCard, { Task } from "@/components/widgets/DayCard";
+import ProgressBar from "@/components/widgets/ProgressBar";
+import MiniWidget from "@/components/widgets/MiniWidget";
 
 interface DashboardProps {
-  userName: string
+  userName: string;
 }
 
 type DayTasks = {
-  [key: number]: Task[]
-}
+  [key: number]: Task[];
+};
 
 export default function Dashboard({ userName }: DashboardProps) {
-  const [dayTasks, setDayTasks] = useLocalStorage<DayTasks>('focusdock_tasks', {})
-  const [showMiniWidget, setShowMiniWidget] = useState(false)
+  const [dayTasks, setDayTasks] = useLocalStorage<DayTasks>(
+    "focusdock_tasks",
+    {},
+  );
+  const [showMiniWidget, setShowMiniWidget] = useState(false);
+  const [alwaysOnTop, setAlwaysOnTop] = useState(false);
 
   const handleUpdateDayTasks = (dayNumber: number, tasks: Task[]) => {
     setDayTasks({
       ...dayTasks,
       [dayNumber]: tasks,
-    })
-  }
+    });
+  };
 
-  const completedDays = Array.from({ length: 7 }, (_, i) => i + 1).filter((day) => {
-    const tasks = dayTasks[day] || []
-    return tasks.length > 0 && tasks.every((task) => task.completed)
-  }).length
+  const toggleAlwaysOnTop = () => {
+    const newState = !alwaysOnTop;
+    setAlwaysOnTop(newState);
+
+    // For web version, keep window focused
+    if (newState) {
+      window.focus();
+
+      // If running as Chrome extension, send message to background
+      if (typeof chrome !== "undefined" && chrome.runtime) {
+        chrome.runtime
+          .sendMessage({
+            type: "TOGGLE_ALWAYS_ON_TOP",
+            enabled: newState,
+          })
+          .catch(() => {
+            // Not in extension mode, that's okay
+          });
+      }
+
+      // For web version, periodically refocus
+      const focusInterval = setInterval(() => {
+        if (!document.hidden && newState) {
+          window.focus();
+        }
+      }, 1000);
+
+      return () => clearInterval(focusInterval);
+    }
+  };
+
+  const completedDays = Array.from({ length: 7 }, (_, i) => i + 1).filter(
+    (day) => {
+      const tasks = dayTasks[day] || [];
+      return tasks.length > 0 && tasks.every((task) => task.completed);
+    },
+  ).length;
 
   return (
     <>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen p-6 pb-20"
+        transition={{ duration: 0.3 }}
+        className="min-h-screen w-full p-4 pb-16"
       >
         {/* Header */}
         <motion.div
-          initial={{ y: -20, opacity: 0 }}
+          initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="max-w-7xl mx-auto mb-8"
+          transition={{ duration: 0.3 }}
+          className="max-w-7xl mx-auto mb-6"
         >
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-accent to-blue-accent rounded-xl flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-white" />
+              <div className="flex items-center gap-2.5 mb-1">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-accent to-blue-accent rounded-lg flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-3xl md:text-4xl font-poppins font-bold">
+                  <h1 className="text-2xl md:text-3xl font-poppins font-bold">
                     {getGreeting()}, {userName}
                   </h1>
-                  <p className="text-gray-400 text-sm">Ready to focus?</p>
+                  <p className="text-gray-400 text-xs">Ready to focus?</p>
                 </div>
               </div>
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowMiniWidget(!showMiniWidget)}
-              className="px-4 py-2 bg-white bg-opacity-10 rounded-xl flex items-center gap-2 hover:bg-opacity-20 transition-all"
-            >
-              <Minimize2 className="w-4 h-4" />
-              Mini Widget
-            </motion.button>
+            <div className="flex gap-2">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={toggleAlwaysOnTop}
+                className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-xs font-medium transition-all duration-200 ${
+                  alwaysOnTop
+                    ? "bg-gradient-to-r from-purple-accent to-blue-accent"
+                    : "bg-white bg-opacity-10 hover:bg-opacity-15"
+                }`}
+              >
+                <Pin
+                  className={`w-3.5 h-3.5 ${alwaysOnTop ? "rotate-45" : ""} transition-transform duration-200`}
+                />
+                Always on Top
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowMiniWidget(!showMiniWidget)}
+                className="px-3 py-1.5 bg-white bg-opacity-10 rounded-lg flex items-center gap-1.5 hover:bg-opacity-15 transition-all duration-200 text-xs font-medium"
+              >
+                <Minimize2 className="w-3.5 h-3.5" />
+                Mini Widget
+              </motion.button>
+            </div>
           </div>
         </motion.div>
 
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="max-w-7xl mx-auto space-y-4">
           {/* Mission */}
           <MissionCard />
 
-          {/* Clock and Timer */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Time Widgets - Compact Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <LiveClock />
             <Clock />
-            <FocusTimer />
+            <RealTimer />
           </div>
 
           {/* Progress Bar */}
@@ -91,11 +150,11 @@ export default function Dashboard({ userName }: DashboardProps) {
 
           {/* 7-Day Challenge */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <h2 className="text-2xl font-poppins font-bold mb-6 gradient-text">
+            <h2 className="text-xl font-poppins font-bold mb-4 gradient-text">
               7-Day Challenge
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -123,7 +182,10 @@ export default function Dashboard({ userName }: DashboardProps) {
       </motion.div>
 
       {/* Mini Widget */}
-      <MiniWidget isOpen={showMiniWidget} onClose={() => setShowMiniWidget(false)} />
+      <MiniWidget
+        isOpen={showMiniWidget}
+        onClose={() => setShowMiniWidget(false)}
+      />
     </>
-  )
+  );
 }

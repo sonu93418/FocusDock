@@ -23,7 +23,7 @@ export default function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-screen flex items-center justify-center p-6"
+      className="min-h-screen h-full w-full flex items-center justify-center p-6"
     >
       <motion.div
         initial={{ scale: 0.9, y: 20 }}
