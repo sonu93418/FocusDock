@@ -9,32 +9,16 @@ import LiveClock from "@/components/widgets/LiveClock";
 import Clock from "@/components/widgets/Clock";
 import RealTimer from "@/components/widgets/RealTimer";
 import MissionCard from "@/components/widgets/MissionCard";
-import DayCard, { Task } from "@/components/widgets/DayCard";
-import ProgressBar from "@/components/widgets/ProgressBar";
+import SevenDayChallenge from "@/components/widgets/SevenDayChallenge";
 import MiniWidget from "@/components/widgets/MiniWidget";
 
 interface DashboardProps {
   userName: string;
 }
 
-type DayTasks = {
-  [key: number]: Task[];
-};
-
 export default function Dashboard({ userName }: DashboardProps) {
-  const [dayTasks, setDayTasks] = useLocalStorage<DayTasks>(
-    "focusdock_tasks",
-    {},
-  );
   const [showMiniWidget, setShowMiniWidget] = useState(false);
   const [alwaysOnTop, setAlwaysOnTop] = useState(false);
-
-  const handleUpdateDayTasks = (dayNumber: number, tasks: Task[]) => {
-    setDayTasks({
-      ...dayTasks,
-      [dayNumber]: tasks,
-    });
-  };
 
   const toggleAlwaysOnTop = () => {
     const newState = !alwaysOnTop;
@@ -66,13 +50,6 @@ export default function Dashboard({ userName }: DashboardProps) {
       return () => clearInterval(focusInterval);
     }
   };
-
-  const completedDays = Array.from({ length: 7 }, (_, i) => i + 1).filter(
-    (day) => {
-      const tasks = dayTasks[day] || [];
-      return tasks.length > 0 && tasks.every((task) => task.completed);
-    },
-  ).length;
 
   return (
     <>
@@ -145,29 +122,8 @@ export default function Dashboard({ userName }: DashboardProps) {
             <RealTimer />
           </div>
 
-          {/* Progress Bar */}
-          <ProgressBar completedDays={completedDays} totalDays={7} />
-
-          {/* 7-Day Challenge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-          >
-            <h2 className="text-xl font-poppins font-bold mb-4 gradient-text">
-              7-Day Challenge
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {Array.from({ length: 7 }, (_, i) => i + 1).map((day) => (
-                <DayCard
-                  key={day}
-                  dayNumber={day}
-                  tasks={dayTasks[day] || []}
-                  onUpdateTasks={(tasks) => handleUpdateDayTasks(day, tasks)}
-                />
-              ))}
-            </div>
-          </motion.div>
+          {/* 7-Day Challenge - New Unified Component */}
+          <SevenDayChallenge />
         </div>
 
         {/* Footer */}
